@@ -1,0 +1,9 @@
+@import '../../../_common/styles/b320x50.scss';
+@import '../../../_common/styles/composite.scss';
+
+.hero{
+	@include pos-scale(517, 0, .5);
+	// top: 0px;
+	// right: 0px;
+	// left: initial;
+}

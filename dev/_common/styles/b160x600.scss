@@ -1,0 +1,42 @@
+@import './common.scss';
+@import './ypy.scss';
+
+
+#banner{
+ width: 160px;
+ height: 600px;
+}
+
+#olg{
+	width: 87px;
+	height: 49px;
+	@include pos(0, 555);
+	// opacity: .5 !important;
+	
+}
+
+
+
+
+#legalBtn{	
+	@include pos(86, 0);	
+	width: 72px;
+	// opacity: 1;
+}
+
+
+.ypy-all{
+	// opacity: ;
+	@include pos-scale(3, 341, 1.03);
+	
+}
+
+
+
+.logo{	
+	@include pos(0, 0);
+	width: 82px;	
+	bottom:-3px;
+	left:0;
+}
+
