@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _proline = require("./proline");
 
 var _helpersHelpersJs = require("./helpers/helpers.js");
@@ -18,19 +20,17 @@ gsap.defaults({
   ease: "power3.out"
 });
 
-var READ_COMPOSITE = { t1: 1.6, t2: 3 };
-var READ_LIVEDEALERS = { t1: 1.6, t2: 3 };
-var READ_GAMESHOW = { t1: 1.6, t2: 3.3 };
+var READ = { t0: 2, t1: 2 };
 
-var READ_ALL = { composite: READ_COMPOSITE, gameshow: READ_GAMESHOW, livedealers: READ_LIVEDEALERS };
-
-var read = READ_ALL[universalBanner.name];
 var w = bannerSize.w;
 var h = bannerSize.h;
 
 function init(_ref) {
   var pos = _ref.pos;
+  var device = _ref.device;
+  var total = _ref.total;
 
+  console.log(pos);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -39,19 +39,16 @@ function init(_ref) {
       }
     } });
 
-  tl.set(".frame1", { opacity: 1 });
-  TweenLite.from(".top", { y: "-=100", opacity: 0, duration: .4, stagger: .05 });
-  TweenLite.from(".bottom", { y: "+=100", opacity: 0, duration: .4, stagger: .05 });
-
-  tl.from(".ypy", { y: "+=150", opacity: 0, duration: .4, stagger: .2 });
-
   TweenLite.set("#shapes", { x: posX, y: posY });
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
 
-  var tlShapes = new TimelineMax();
-  for (var i = 0; i < 40; i++) {
-    tlShapes.add(copyShape(posX, posY), 0);
-  }
+  tl.set(".frame1", { opacity: 1 });
+  tl.add("bars");
+  tl.from(".top", { y: "-=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
+  tl.from(".bottom", { y: "+=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
+
+  tl.from(".ypy", { y: "+=150", opacity: 0, duration: .4, stagger: .2 }, "bars+=.2");
+  // return
 
   scaler(".screen_1_screen_only", pos[0], pos[1]);
   scaler(".screen_2", pos[0], pos[1]);
@@ -60,23 +57,25 @@ function init(_ref) {
   tl.from(".screen_1_screen_only", { duration: .4, scale: 0, ease: "back.out" }, "screen_1");
   tl.from(".t0", { opacity: 0, duration: .3 }, "screen_1");
 
-  tl.add("screen_change", "+=2");
+  tl.add("screen_change", "+=" + READ.t0);
+  for (var i = 0; i < total; i++) {
+    tl.add(copyShape(posX, posY), "screen_change");
+  }
+  tl.to(".shapes", { opacity: 0, duration: 1 }, "screen_change+=.5");
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
   tl.to(".screen_1", { duration: .3, scale: 0, ease: "back.out" }, "screen_change");
 
   tl.from(".t1", { opacity: 0, duration: .3 }, "screen_change");
 
-  tl.add(tlShapes);
-  tlShapes.add("shapesOut");
-  tlShapes.to(".shapes", { opacity: 0, duration: 1 }, "shapesOut");
-  // tlShapes.from(".shapes_all", {opacity:0, duration:1}, "shapesOut")
+  tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
 
-  tl.to(".t1", { opacity: 0, duration: .3 }, "+=2");
-
-  tlShapes.add("end", .5);
+  tl.add("end");
   tl.to(".ypy", { opacity: 0, duration: .3 }, "end");
-  tl.to(".screen", { x: -91, duration: .3 }, "end");
+  if (device) {
+    tl.to(".screen", _extends({}, device, { duration: .3 }), "end");
+  }
+
   tl.from(".end_text", { opacity: 0, duration: .3 });
   tl.from([".end_legal", ".end_cta"], { opacity: 0, duration: .3 });
 
@@ -92,7 +91,6 @@ function scaler(el, x, y) {
 function minMax(min, max) {
   var diff = max - min;
   var num = Math.random() * diff + min;
-
   return num;
 }
 
@@ -155,7 +153,6 @@ function logoGO() {
 exports.init = init;
 exports.olg = _proline.olg;
 exports.bannerSize = bannerSize;
-exports.read = read;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";
@@ -229,14 +226,11 @@ exports.initYPY = initYPY;
 exports.ypyScroll = ypyScroll;
 
 },{}],5:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-var ypy = new TimelineMax();
-ypy.from([".ypy_1", ".ypy_2", ".ypy_3"], { duration: .3, y: "-=200", stagger: .13 });
-
-(0, _commonJsCommonJs.init)({ ypy: ypy });
+(0, _commonJsCommonJs.init)({ pos: [.5, .41], total: 100 });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 

@@ -309,4 +309,18 @@ svg {
   opacity: 0;
 }
 
+svg#fire {
+  -webkit-transform: translate(39px, -12px) scale(0, 0);
+  -ms-transform: translate(39px, -12px) scale(0, 0);
+  transform: translate(39px, -12px) scale(0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000px;
+  perspective: 1000px;
+  position: absolute;
+  width: 12px;
+  bottom: -3px;
+  left: 0;
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -19,6 +19,16 @@
  
 
 .logo{		
-	width: 82px;		
+	width: 69px;		
+	bottom: -2px;
+	left:0px
 }
 
+
+svg#fire{
+	@include pos-scale(45, -14, 0);
+	
+	width: 15px;	
+	bottom:-3px;
+	left:0;	
+}

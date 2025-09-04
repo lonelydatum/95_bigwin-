@@ -8,17 +8,14 @@ gsap.defaults({
   ease: "power3.out"
 });
 
-const READ_COMPOSITE = { t1: 1.6, t2: 3 }
-const READ_LIVEDEALERS = { t1: 1.6, t2: 3 }
-const READ_GAMESHOW = { t1: 1.6, t2: 3.3 }
+const READ = {t0:2, t1:2}
 
 
-const READ_ALL = { composite: READ_COMPOSITE, gameshow: READ_GAMESHOW, livedealers:READ_LIVEDEALERS }
-
-const read = READ_ALL[universalBanner.name]
+ 
 const {w, h} = bannerSize
  
-function init( {pos} ){	
+function init( {pos, device, total} ){	
+	console.log(pos);
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -27,23 +24,21 @@ function init( {pos} ){
 		}
 	}})
 
-
+	TweenLite.set("#shapes", {x:posX, y:posY})
+  TweenLite.set(["#circle", "#tri"], {scale:0})
 	
 	
 	tl.set(".frame1", {opacity:1})	 
-  TweenLite.from(".top", {y:"-=100", opacity:0, duration:.4, stagger:.05})
-  TweenLite.from(".bottom", {y:"+=100", opacity:0, duration:.4, stagger:.05})
+	tl.add("bars")
+  tl.from(".top", {y:"-=100", opacity:0, duration:.5, stagger:.05}, "bars")
+  tl.from(".bottom", {y:"+=100", opacity:0, duration:.5, stagger:.05}, "bars")
 
 
-  tl.from(".ypy", {y:"+=150", opacity:0, duration:.4, stagger:.2})
 
-  TweenLite.set("#shapes", {x:posX, y:posY})
-  TweenLite.set(["#circle", "#tri"], {scale:0})
-
-  const tlShapes = new TimelineMax()
-  for(let i=0;i<40;i++){
-  	tlShapes.add(copyShape(posX, posY), 0)
-  }
+  tl.from(".ypy", {y:"+=150", opacity:0, duration:.4, stagger:.2}, "bars+=.2")
+// return
+  
+  
 
   scaler(".screen_1_screen_only", pos[0], pos[1])
   scaler(".screen_2", pos[0], pos[1])
@@ -53,8 +48,13 @@ function init( {pos} ){
   tl.from(".t0", {opacity:0, duration:.3}, "screen_1")
   
 
+  
 
-  tl.add("screen_change", "+=2")
+  tl.add("screen_change", `+=${READ.t0}`)
+  for(let i=0;i<total;i++){
+  	tl.add(copyShape(posX, posY), "screen_change")
+  }
+  tl.to(".shapes", {opacity:0, duration:1}, "screen_change+=.5")
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
   tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
@@ -62,20 +62,16 @@ function init( {pos} ){
 	tl.from(".t1", {opacity:0, duration:.3}, "screen_change")
   
 
+ 
 
-  tl.add(tlShapes)
-  tlShapes.add("shapesOut")
-  tlShapes.to(".shapes", {opacity:0, duration:1}, "shapesOut")
-  // tlShapes.from(".shapes_all", {opacity:0, duration:1}, "shapesOut")
+  tl.to(".t1", {opacity:0, duration:.3}, `+=${READ.t1}`)
 
-
-
-
-  tl.to(".t1", {opacity:0, duration:.3}, "+=2")
-
-  tlShapes.add("end", .5)
+  tl.add("end")
   tl.to(".ypy", {opacity:0, duration:.3}, "end")
-  tl.to(".screen", {x:-91, duration:.3}, "end")
+  if(device){
+  	tl.to(".screen", {...device, duration:.3}, "end")	
+  }
+  
   tl.from(".end_text", {opacity:0, duration:.3})
   tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})
   
@@ -86,14 +82,11 @@ function init( {pos} ){
 
 function scaler(el, x, y){
 	TweenLite.set(el, { transformOrigin:`${x*100}% ${y*100}%`, x:`-${x*w}`, y:`-${y*h}` })
-	
-	
 }
 
 function minMax(min, max){
 	const diff = max-min
-	const num =  Math.random()*diff + min
-	
+	const num =  Math.random()*diff + min	
 	return num
 }
 
@@ -159,4 +152,4 @@ function logoGO(){
 	tl.to(`#zero`, {duration:.1, opacity:1}, "zero")
 	return tl
 }
-export { init, olg, bannerSize, read }
+export { init, olg, bannerSize }

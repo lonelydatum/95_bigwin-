@@ -11,20 +11,16 @@
  	top:0;
  	left:0;
  }
-
- .yellow{
- 	// fill:#fed925;
- }
-
-
-  .green{
- 	// fill:#8fc640;
- }
-
- .blue polygon{
- 	// fill:#68cef6
- }
+ 
 
  #tri, #circle{
  	opacity:0;
  }
+
+ svg#fire{
+	@include pos-scale(39, -12, 0);
+	
+	width: 12px;	
+	bottom:-3px;
+	left:0;	
+}
