@@ -1,59 +1,92 @@
-import {logoGO, read} from '../../_common/js/common.js'
-
-const ypy = new TimelineMax()
-ypy.from([".ypy_1", ".ypy_2", ".ypy_3"], {duration:.3, y:"-=200", stagger:.13})
+import {bannerSize, logoGO, copyShape, minMax, scaler} from '../../_common/js/common.js'
 
 
-function init({ypy, device}){	
+
+
+
+const READ = {t0:2, t1:2}
+
+
+ 
+const {w, h} = bannerSize
+
+function init( {pos, device, total} ){	
+	console.log(pos);
+	const posX = pos[0] * w
+	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
 		if(document.getElementById("legalBtn")){			
 			TweenLite.set("#legalBtn", {display:"block"})
 		}
 	}})
+
+	TweenLite.set("#shapes", {x:posX, y:posY})
+  TweenLite.set(["#circle", "#tri"], {scale:0})
 	
-	TweenLite.to(".hero_on", {duration:2, opacity:1, yoyo:true, repeat:0, repeatDelay:0, ease:"back.out"})
-
-	TweenLite.to(".phone", {duration:.8, opacity:.6, yoyo:true, repeat:11, repeatDelay:0, ease:"back.out"})
-
+	
 	tl.set(".frame1", {opacity:1})	 
-	tl.set(".end_device", {  opacity:0})
-	
-	
-
-	tl.add(ypy)	
-
-	tl.to(".ypy", {duration:.3, opacity:0}, "+=1")
-
-	tl.add("t1", "+=.2")
-	tl.from([".t1"], {duration:.3, y:"+=30", opacity:0}, "t1")
-	tl.from([".device"], {duration:.5, opacity:0}, "t1")
-	tl.to(".t1", {duration:.3, opacity:0}, `+=${read.t1}`)
-
-	
+	tl.add("bars")
+  tl.from(".top", {y:"-=100", opacity:0, duration:.5, stagger:.05}, "bars")
+  tl.from(".bottom", {y:"+=100", opacity:0, duration:.5, stagger:.05}, "bars")
 
 
-	tl.add("t2")
+
+  tl.from(".ypy", {y:"+=150", opacity:0, duration:.25, stagger:.2}, "bars+=.2")
+
+  tl.to(".ypy", { opacity:0, duration:.4 }, "+=1")
+
+
+// return
+  
+  
+
+  scaler(".screen_1_screen_only", pos[0], pos[1])
+  scaler(".screen_2", pos[0], pos[1])
+
+  tl.add("screen_1")
+	tl.from(".screen_1_screen_only", {duration:.4, scale:0, ease:"back.out"}, "screen_1")
+  tl.from(".t0_a", {opacity:0, duration:.3}, "screen_1")
+
+
+  
+
+  tl.add("screen_change", `+=${READ.t0}`)
+  for(let i=0;i<total;i++){
+  	tl.add(copyShape(posX, posY), "screen_change")
+  }
+
+  tl.to(".t0_a", {opacity:0, duration:.3}, "screen_change")
+  tl.from(".t0_b", {opacity:0, duration:.3}, "screen_change")
+
+
+  tl.to(".shapes", {opacity:0, duration:1}, "screen_change+=.5")
+  
+
+  tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
+  tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
+
+  tl.to(".screen", {duration:.3, opacity:0})
+
+  tl.to(".t0_b", {opacity:0, duration:.3} )
+	tl.from(".t1", {opacity:0, duration:.3})
+  
+
  
-	
-	
-	tl.from(".t2", {duration:.3, opacity:0}, "t2")
-	tl.to(".t2", {duration:.3, opacity:0}, `+=${read.t2}`)
-	
 
-	// tl.to([  ".frame1"], {duration:.3, opacity:0} )
+  tl.to(".t1", {opacity:0, duration:.3}, `+=${READ.t1}`)
 
-
-	
-	tl.set(".frame2", {opacity:1}, "+=.3")
-
-	
-	tl.from(".end_url", {duration:.3, opacity:0}, "+=.3")
-	tl.from(".end_ypy", {duration:.3, opacity:0}, "+=.3")
-	tl.from(".end_cta", {duration:.3, opacity:0, y:"+=50", opacity:0}, "+=.3")
-
-	tl.add(logoGO())
+  tl.add("end")
+  
+  if(device){
+  	tl.to(".screen", {...device, duration:.3}, "end")	
+  }
+  
+  tl.from(".end_text", {opacity:0, duration:.3})
+  tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})
+  
+  tl.add(logoGO())
+  
 	return tl
 }
 
-
-init({ypy})
+init({pos:[.5, .75], total:50})

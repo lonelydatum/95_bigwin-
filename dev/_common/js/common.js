@@ -15,7 +15,7 @@ const READ = {t0:2, t1:2}
 const {w, h} = bannerSize
  
 function init( {pos, device, total} ){	
-	console.log(pos);
+	console.log(pos, device, total);
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -152,4 +152,4 @@ function logoGO(){
 	tl.to(`#zero`, {duration:.1, opacity:1}, "zero")
 	return tl
 }
-export { init, olg, bannerSize }
+export { bannerSize, logoGO, copyShape, minMax, scaler, init }

@@ -30,7 +30,7 @@ function init(_ref) {
   var device = _ref.device;
   var total = _ref.total;
 
-  console.log(pos);
+  console.log(pos, device, total);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -150,9 +150,12 @@ function logoGO() {
   tl.to("#zero", { duration: .1, opacity: 1 }, "zero");
   return tl;
 }
-exports.init = init;
-exports.olg = _proline.olg;
 exports.bannerSize = bannerSize;
+exports.logoGO = logoGO;
+exports.copyShape = copyShape;
+exports.minMax = minMax;
+exports.scaler = scaler;
+exports.init = init;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";
@@ -226,14 +229,11 @@ exports.initYPY = initYPY;
 exports.ypyScroll = ypyScroll;
 
 },{}],5:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-var ypy = new TimelineMax();
-ypy.from([".ypy_1", ".ypy_2", ".ypy_3"], { duration: .3, y: "-=200", stagger: .13 });
-
-(0, _commonJsCommonJs.init)({ ypy: ypy });
+(0, _commonJsCommonJs.init)({ pos: [.75, .50], total: 40 });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 

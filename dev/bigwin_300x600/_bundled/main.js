@@ -30,7 +30,7 @@ function init(_ref) {
   var device = _ref.device;
   var total = _ref.total;
 
-  console.log(pos);
+  console.log(pos, device, total);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -150,9 +150,12 @@ function logoGO() {
   tl.to("#zero", { duration: .1, opacity: 1 }, "zero");
   return tl;
 }
-exports.init = init;
-exports.olg = _proline.olg;
 exports.bannerSize = bannerSize;
+exports.logoGO = logoGO;
+exports.copyShape = copyShape;
+exports.minMax = minMax;
+exports.scaler = scaler;
+exports.init = init;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";

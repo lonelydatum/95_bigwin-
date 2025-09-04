@@ -30,7 +30,7 @@ function init(_ref) {
   var device = _ref.device;
   var total = _ref.total;
 
-  console.log(pos);
+  console.log(pos, device, total);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -150,9 +150,12 @@ function logoGO() {
   tl.to("#zero", { duration: .1, opacity: 1 }, "zero");
   return tl;
 }
-exports.init = init;
-exports.olg = _proline.olg;
 exports.bannerSize = bannerSize;
+exports.logoGO = logoGO;
+exports.copyShape = copyShape;
+exports.minMax = minMax;
+exports.scaler = scaler;
+exports.init = init;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";
@@ -228,55 +231,85 @@ exports.ypyScroll = ypyScroll;
 },{}],5:[function(require,module,exports){
 "use strict";
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-var ypy = new TimelineMax();
-ypy.from([".ypy_1", ".ypy_2", ".ypy_3"], { duration: .3, y: "-=200", stagger: .13 });
+var READ = { t0: 2, t1: 2 };
+
+var w = _commonJsCommonJs.bannerSize.w;
+var h = _commonJsCommonJs.bannerSize.h;
 
 function init(_ref) {
-	var ypy = _ref.ypy;
-	var device = _ref.device;
+  var pos = _ref.pos;
+  var device = _ref.device;
+  var total = _ref.total;
 
-	var tl = new TimelineMax({ onComplete: function onComplete() {
-			if (document.getElementById("legalBtn")) {
-				TweenLite.set("#legalBtn", { display: "block" });
-			}
-		} });
+  console.log(pos);
+  var posX = pos[0] * w;
+  var posY = pos[1] * h;
+  var tl = new TimelineMax({ onComplete: function onComplete() {
+      if (document.getElementById("legalBtn")) {
+        TweenLite.set("#legalBtn", { display: "block" });
+      }
+    } });
 
-	TweenLite.to(".hero_on", { duration: 2, opacity: 1, yoyo: true, repeat: 0, repeatDelay: 0, ease: "back.out" });
+  TweenLite.set("#shapes", { x: posX, y: posY });
+  TweenLite.set(["#circle", "#tri"], { scale: 0 });
 
-	TweenLite.to(".phone", { duration: .8, opacity: .6, yoyo: true, repeat: 11, repeatDelay: 0, ease: "back.out" });
+  tl.set(".frame1", { opacity: 1 });
+  tl.add("bars");
+  tl.from(".top", { y: "-=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
+  tl.from(".bottom", { y: "+=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
 
-	tl.set(".frame1", { opacity: 1 });
-	tl.set(".end_device", { opacity: 0 });
+  tl.from(".ypy", { y: "+=150", opacity: 0, duration: .25, stagger: .2 }, "bars+=.2");
 
-	tl.add(ypy);
+  tl.to(".ypy", { opacity: 0, duration: .4 }, "+=1");
 
-	tl.to(".ypy", { duration: .3, opacity: 0 }, "+=1");
+  // return
 
-	tl.add("t1", "+=.2");
-	tl.from([".t1"], { duration: .3, y: "+=30", opacity: 0 }, "t1");
-	tl.from([".device"], { duration: .5, opacity: 0 }, "t1");
-	tl.to(".t1", { duration: .3, opacity: 0 }, "+=" + _commonJsCommonJs.read.t1);
+  (0, _commonJsCommonJs.scaler)(".screen_1_screen_only", pos[0], pos[1]);
+  (0, _commonJsCommonJs.scaler)(".screen_2", pos[0], pos[1]);
 
-	tl.add("t2");
+  tl.add("screen_1");
+  tl.from(".screen_1_screen_only", { duration: .4, scale: 0, ease: "back.out" }, "screen_1");
+  tl.from(".t0_a", { opacity: 0, duration: .3 }, "screen_1");
 
-	tl.from(".t2", { duration: .3, opacity: 0 }, "t2");
-	tl.to(".t2", { duration: .3, opacity: 0 }, "+=" + _commonJsCommonJs.read.t2);
+  tl.add("screen_change", "+=" + READ.t0);
+  for (var i = 0; i < total; i++) {
+    tl.add((0, _commonJsCommonJs.copyShape)(posX, posY), "screen_change");
+  }
 
-	// tl.to([  ".frame1"], {duration:.3, opacity:0} )
+  tl.to(".t0_a", { opacity: 0, duration: .3 }, "screen_change");
+  tl.from(".t0_b", { opacity: 0, duration: .3 }, "screen_change");
 
-	tl.set(".frame2", { opacity: 1 }, "+=.3");
+  tl.to(".shapes", { opacity: 0, duration: 1 }, "screen_change+=.5");
 
-	tl.from(".end_url", { duration: .3, opacity: 0 }, "+=.3");
-	tl.from(".end_ypy", { duration: .3, opacity: 0 }, "+=.3");
-	tl.from(".end_cta", { duration: .3, opacity: 0, y: "+=50", opacity: 0 }, "+=.3");
+  tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
+  tl.to(".screen_1", { duration: .3, scale: 0, ease: "back.out" }, "screen_change");
 
-	tl.add((0, _commonJsCommonJs.logoGO)());
-	return tl;
+  tl.to(".screen", { duration: .3, opacity: 0 });
+
+  tl.to(".t0_b", { opacity: 0, duration: .3 });
+  tl.from(".t1", { opacity: 0, duration: .3 });
+
+  tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
+
+  tl.add("end");
+
+  if (device) {
+    tl.to(".screen", _extends({}, device, { duration: .3 }), "end");
+  }
+
+  tl.from(".end_text", { opacity: 0, duration: .3 });
+  tl.from([".end_legal", ".end_cta"], { opacity: 0, duration: .3 });
+
+  tl.add((0, _commonJsCommonJs.logoGO)());
+
+  return tl;
 }
 
-init({ ypy: ypy });
+init({ pos: [.5, .75], total: 50 });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 

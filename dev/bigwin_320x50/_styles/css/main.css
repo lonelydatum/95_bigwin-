@@ -306,15 +306,19 @@ svg#fire {
   z-index: 10;
 }
 
-.hero {
-  -webkit-transform: translate(517px, 0px) scale(0.5, 0.5);
-  -ms-transform: translate(517px, 0px) scale(0.5, 0.5);
-  transform: translate(517px, 0px) scale(0.5, 0.5);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
+.shapes {
+  position: relative;
+}
+
+.shapes svg {
+  width: 30px;
   position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#tri, #circle {
+  opacity: 0;
 }
 
 /*# sourceMappingURL=main.css.map */
