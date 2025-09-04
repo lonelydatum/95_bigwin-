@@ -17,6 +17,118 @@ const READ_ALL = { composite: READ_COMPOSITE, gameshow: READ_GAMESHOW, livedeale
 
 const read = READ_ALL[universalBanner.name]
 const {w, h} = bannerSize
+ 
+function init( {pos} ){	
+	const posX = pos[0] * w
+	const posY = pos[1] * h
+	const tl = new TimelineMax({onComplete:()=>{
+		if(document.getElementById("legalBtn")){			
+			TweenLite.set("#legalBtn", {display:"block"})
+		}
+	}})
+
+
+	
+	
+	tl.set(".frame1", {opacity:1})	 
+  TweenLite.from(".top", {y:"-=100", opacity:0, duration:.4, stagger:.05})
+  TweenLite.from(".bottom", {y:"+=100", opacity:0, duration:.4, stagger:.05})
+
+
+  tl.from(".ypy", {y:"+=150", opacity:0, duration:.4, stagger:.2})
+
+  TweenLite.set("#shapes", {x:posX, y:posY})
+  TweenLite.set(["#circle", "#tri"], {scale:0})
+
+  const tlShapes = new TimelineMax()
+  for(let i=0;i<40;i++){
+  	tlShapes.add(copyShape(posX, posY), 0)
+  }
+
+  scaler(".screen_1_screen_only", pos[0], pos[1])
+  scaler(".screen_2", pos[0], pos[1])
+
+	tl.from(".screen_1_screen_only", {duration:.5, scale:0, ease:"back.out"})
+
+  tl.from(".t0", {opacity:0, duration:.3})
+  
+
+
+  tl.add("screen_change", "+=2")
+  tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
+  tl.from(".screen_2", {duration:.5, scale:0, ease:"back.out"}, "screen_change")
+  tl.to(".screen_1", {duration:.5, scale:0, ease:"back.out"}, "screen_change")
+
+	tl.from(".t1", {opacity:0, duration:.3})
+  
+
+
+  tl.add(tlShapes)
+  tlShapes.add("shapesOut", .5)
+  tlShapes.to(".shapes", {opacity:0, duration:1}, "shapesOut")
+  // tlShapes.from(".shapes_all", {opacity:0, duration:1}, "shapesOut")
+
+
+
+
+  tl.to(".t1", {opacity:0, duration:.3}, "+=2")
+
+  tlShapes.add("end", .5)
+  tl.to(".ypy", {opacity:0, duration:.3}, "end")
+  tl.to(".screen", {x:-91, duration:.3}, "end")
+  tl.from(".end_text", {opacity:0, duration:.3})
+  tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})
+  
+  tl.add(logoGO())
+  
+	return tl
+}
+
+function scaler(el, x, y){
+	TweenLite.set(el, { transformOrigin:`${x*100}% ${y*100}%`, x:`-${x*w}`, y:`-${y*h}` })
+	
+	
+}
+
+function minMax(min, max){
+	const diff = max-min
+	const num =  Math.random()*diff + min
+	
+	return num
+}
+
+function copyShape(posX, posY){
+	const tl = new TimelineMax()
+	const options = ["circle", "tri"]
+	const colors = ["66cef6", "fed925", "8dc63f", "003c71", "fed925", "fed925"]
+	const numShape = Math.floor(Math.random()*options.length)
+	const numColors = Math.floor(Math.random()*colors.length)
+	
+	
+	const cloned = document.getElementById(options[numShape]).cloneNode(true)
+  document.getElementById("shapes").appendChild(cloned)
+  const PADDING = 30
+  const w_ = w+PADDING
+  const h_ = h+PADDING
+
+
+  const x = Math.random()*w_ - posX-PADDING
+  const y = Math.random()*h_ - posY-PADDING
+  TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
+  const obj = {
+  	x:x, 
+  	y:y,   	
+  	duration:minMax(.2, 1.3), 
+  	rotation: minMax(0, 300),
+  	scale:minMax(.2, .7)}
+  tl.to(cloned, obj)
+  return tl
+  // tl.to(cloned, {opacity:0, duration:1}, 2)
+
+}
+
+
+ 
 
 function logoGO(){
 	const tl = new TimelineMax()
@@ -47,43 +159,4 @@ function logoGO(){
 	tl.to(`#zero`, {duration:.1, opacity:1}, "zero")
 	return tl
 }
-
-function init({ypy, device}, logoAnimateStart=false){	
-	const tl = new TimelineMax({onComplete:()=>{
-		if(document.getElementById("legalBtn")){			
-			TweenLite.set("#legalBtn", {display:"block"})
-		}
-	}})
-	
-	TweenLite.to(".hero_on", {duration:2, opacity:1, yoyo:true, repeat:0, repeatDelay:0, ease:"back.out"})
-	TweenLite.to(".phone", {duration:.8, opacity:.6, yoyo:true, repeat:11, repeatDelay:0, ease:"back.out"})
-	tl.set(".frame1", {opacity:1})	 
- 
-	tl.add(ypy)
-	tl.add("t1", "+=.2")
-	tl.from([".t1"], {duration:.3, opacity:0}, "t1")
-	tl.from([".device"], {duration:.5, opacity:0}, "t1")
-	tl.to(".t1", {duration:.3, opacity:0}, `+=${read.t1}`)
- 
-	tl.add("t2")
-	if(device){
-		tl.add(device)	
-	}
-		
-	tl.from(".t2", {duration:.3, opacity:0}, "t2")
-	tl.to(".t2", {duration:.3, opacity:0}, `+=${read.t2}`)
-	tl.to([  ".frame1"], {duration:.3, opacity:0} )
-	tl.set(".frame2", {opacity:1}, "+=.4")
-	tl.from(".end_device", {duration:.3, opacity:0})
-	tl.from(".end_url", {duration:.3, opacity:0}, "+=.3")
-	tl.from(".end_ypy", {duration:.3, opacity:0}, "+=.3")
-	tl.from(".end_cta", {duration:.3, opacity:0, y:"+=50", opacity:0}, "+=.3")
-
-	tl.add(logoGO())
-	return tl
-}
-
-
- 
-
-export { init, olg, bannerSize, logoGO, read }
+export { init, olg, bannerSize, read }
