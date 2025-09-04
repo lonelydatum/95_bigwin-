@@ -49,15 +49,15 @@ function init( {pos} ){
   scaler(".screen_2", pos[0], pos[1])
 
   tl.add("screen_1")
-	tl.from(".screen_1_screen_only", {duration:.5, scale:0, ease:"back.out"}, "screen_1")
+	tl.from(".screen_1_screen_only", {duration:.4, scale:0, ease:"back.out"}, "screen_1")
   tl.from(".t0", {opacity:0, duration:.3}, "screen_1")
   
 
 
   tl.add("screen_change", "+=2")
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
-  tl.from(".screen_2", {duration:.5, scale:0, ease:"back.out"}, "screen_change")
-  tl.to(".screen_1", {duration:.5, scale:0, ease:"back.out"}, "screen_change")
+  tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
+  tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
 
 	tl.from(".t1", {opacity:0, duration:.3}, "screen_change")
   
@@ -107,7 +107,7 @@ function copyShape(posX, posY){
 	
 	const cloned = document.getElementById(options[numShape]).cloneNode(true)
   document.getElementById("shapes").appendChild(cloned)
-  const PADDING = 90
+  const PADDING = 60
   const w_ = w+PADDING
   const h_ = h+PADDING
 

@@ -206,9 +206,9 @@ canvas, .text, .frame, .outline, img {
 }
 
 svg#fire {
-  -webkit-transform: translate(54px, -17px) scale(0, 0);
-  -ms-transform: translate(54px, -17px) scale(0, 0);
-  transform: translate(54px, -17px) scale(0, 0);
+  -webkit-transform: translate(38px, -11px) scale(0, 0);
+  -ms-transform: translate(38px, -11px) scale(0, 0);
+  transform: translate(38px, -11px) scale(0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000px;
