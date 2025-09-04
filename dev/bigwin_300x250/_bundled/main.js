@@ -56,19 +56,19 @@ function init(_ref) {
   scaler(".screen_1_screen_only", pos[0], pos[1]);
   scaler(".screen_2", pos[0], pos[1]);
 
-  tl.from(".screen_1_screen_only", { duration: .5, scale: 0, ease: "back.out" });
-
-  tl.from(".t0", { opacity: 0, duration: .3 });
+  tl.add("screen_1");
+  tl.from(".screen_1_screen_only", { duration: .5, scale: 0, ease: "back.out" }, "screen_1");
+  tl.from(".t0", { opacity: 0, duration: .3 }, "screen_1");
 
   tl.add("screen_change", "+=2");
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .5, scale: 0, ease: "back.out" }, "screen_change");
   tl.to(".screen_1", { duration: .5, scale: 0, ease: "back.out" }, "screen_change");
 
-  tl.from(".t1", { opacity: 0, duration: .3 });
+  tl.from(".t1", { opacity: 0, duration: .3 }, "screen_change");
 
   tl.add(tlShapes);
-  tlShapes.add("shapesOut", .5);
+  tlShapes.add("shapesOut");
   tlShapes.to(".shapes", { opacity: 0, duration: 1 }, "shapesOut");
   // tlShapes.from(".shapes_all", {opacity:0, duration:1}, "shapesOut")
 
@@ -105,7 +105,7 @@ function copyShape(posX, posY) {
 
   var cloned = document.getElementById(options[numShape]).cloneNode(true);
   document.getElementById("shapes").appendChild(cloned);
-  var PADDING = 30;
+  var PADDING = 90;
   var w_ = w + PADDING;
   var h_ = h + PADDING;
 
