@@ -139,7 +139,7 @@ function copyShape(posX, posY) {
   var duration = Math.min(h / MAGIC_NUMBER, 2);
 
   var obj = {
-    duration: minMax(.3, 1),
+    duration: minMax(.5, .8),
 
     scale: minMax(.15, .7),
     x: p2.x,
@@ -156,7 +156,7 @@ function copyShape(posX, posY) {
   //     autoRotate: false
   // },
   tl.to(cloned, obj);
-  tl.to(cloned, { duration: minMax(.3, 1), y: "+=200", rotation: minMax(90, 300), x: (Math.random() > .5 ? "-" : "+") + "=40", opacity: 0 }, "-=.1");
+  tl.to(cloned, { duration: minMax(.3, 1), y: "+=100", rotation: minMax(90, 300), x: (Math.random() > .5 ? "-" : "+") + "=40", opacity: 0 }, "-=.2");
   return tl;
 }
 
