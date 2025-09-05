@@ -125,7 +125,7 @@ function copyShape(posX, posY) {
   var w_ = w + PADDING;
   var h_ = h + PADDING;
 
-  var x = Math.random() * w_ - posX;
+  var x = Math.random() * 300 - 150;
 
   var y = Math.random() * h_ - posY;
 

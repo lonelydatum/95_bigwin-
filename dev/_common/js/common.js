@@ -124,7 +124,7 @@ function copyShape(posX, posY){
   const h_ = h+PADDING
 
 
-  let x = (Math.random()*w_) - posX
+  let x = (Math.random()*300) - 150
   
   
   const y = Math.random()*h_ - posY
