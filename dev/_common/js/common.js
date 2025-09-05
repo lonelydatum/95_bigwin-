@@ -28,7 +28,7 @@ function init( {pos, device, total} ){
 		}
 	}})
 	tl.set(".frame1", {opacity:1})	 
-	TweenLite.set("#shapes", {x:posX, y:posY+90})
+	TweenLite.set("#shapes", {x:posX, y:posY})
   TweenLite.set(["#circle", "#tri"], {scale:0})
 	
 	
@@ -131,27 +131,33 @@ function copyShape(posX, posY){
   const y = Math.random()*h_ - posY
   
   
-  const p2 = {x:x*.6, y:minMax(-200, -100)}
-  const p3 = {x:minMax(x, x-50), y:h-posY+8}
+  const p2 = {x:x, y:minMax(-posX, 200)}
+  // const p3 = {x:x, y:minMax(-200, 200)}
+  const p3 = {x:x, y:h-posY+8}
   
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
   const MAGIC_NUMBER = 130; // higher = faster
   const duration = Math.min(h/MAGIC_NUMBER, 2)
   
   const obj = {  	
-  	duration:minMax(duration*.7, duration),
-  	scale: minMax(.2, .9),
-  	ease:"power3.in",
+  	duration:minMax(.3, 1),
+  	
+  	scale: minMax(.15, .7),
+  	x:p2.x,
+  	y:p2.y,
+  	ease:"power2.out",
   	rotation:minMax(90, 300),
-  	motionPath: {
-        path: [
-           p2, p3
-        ],
-        curviness: .5, // makes a nice smooth arc
-        autoRotate: false
-  	},
+  	// motionPath: {
+    //     path: [
+    //        p2, p3
+    //     ],
+    //     curviness: .5, // makes a nice smooth arc
+    //     autoRotate: false
+  	// },
 	}
+
   tl.to(cloned, obj)
+  tl.to(cloned, {duration:minMax(.3, 1), y:"+=200",rotation:minMax(90, 300), x:`${Math.random()>.5?"-":"+"}=40`, opacity:0}, "-=.1")
   return tl
   
 
