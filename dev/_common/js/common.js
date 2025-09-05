@@ -136,9 +136,9 @@ function copyShape(posX, posY){
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
   const MAGIC_NUMBER = 100
   const duration = Math.min(h/MAGIC_NUMBER, 3.6)
-  console.log(duration);
+  
   const obj = {  	
-  	duration:minMax(1, duration),
+  	duration:minMax(.5, duration),
   	scale: minMax(.1, .7),
   	ease:"back.out",
   	rotation:minMax(90, 300),
