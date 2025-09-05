@@ -12,7 +12,7 @@ gsap.registerPlugin(MotionPathPlugin)
 
 
 
-const READ = {t0:2, t1:2}
+const READ = {t0:2.5, t1:2.8}
 
 
  
@@ -59,15 +59,14 @@ function init( {pos, device, total} ){
   tl.call(()=>{
   	confetti({total, posX, posY})
   })
-  // return
-  // tl.to(".shapes", {opacity:0, duration:1}, "screen_change+=.5")
+  
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
   tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
 
 	tl.from(".t1", {opacity:0, duration:.3}, "screen_change")
   
-	tl.to(".shapes", {opacity:0, duration:2}, "+=1")
+	
  
 
   tl.to(".t1", {opacity:0, duration:.3}, `+=${READ.t1}`)
@@ -90,12 +89,14 @@ function init( {pos, device, total} ){
 function confetti({total, posX, posY}){
 	const MAGIC_NUMBER = 750
 	const area = w*h
-	console.log(area/MAGIC_NUMBER);
+	
 	const tl = new TimelineMax()
 	for(let i=0;i<area/MAGIC_NUMBER;i++){
   
   	tl.add(copyShape(posX, posY), 0)
   }
+  tl.add("gone", 3)
+  tl.to(".shapes", {opacity:0, duration:2}, "gone")
 }
 
 function scaler(el, x, y){

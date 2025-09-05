@@ -22,7 +22,7 @@ gsap.defaults({
 
 gsap.registerPlugin(MotionPathPlugin);
 
-var READ = { t0: 2, t1: 2 };
+var READ = { t0: 2.5, t1: 2.8 };
 
 var w = bannerSize.w;
 var h = bannerSize.h;
@@ -62,15 +62,12 @@ function init(_ref) {
   tl.call(function () {
     confetti({ total: total, posX: posX, posY: posY });
   });
-  // return
-  // tl.to(".shapes", {opacity:0, duration:1}, "screen_change+=.5")
+
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
   tl.to(".screen_1", { duration: .3, scale: 0, ease: "back.out" }, "screen_change");
 
   tl.from(".t1", { opacity: 0, duration: .3 }, "screen_change");
-
-  tl.to(".shapes", { opacity: 0, duration: 2 }, "+=1");
 
   tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
 
@@ -95,12 +92,14 @@ function confetti(_ref2) {
 
   var MAGIC_NUMBER = 750;
   var area = w * h;
-  console.log(area / MAGIC_NUMBER);
+
   var tl = new TimelineMax();
   for (var i = 0; i < area / MAGIC_NUMBER; i++) {
 
     tl.add(copyShape(posX, posY), 0);
   }
+  tl.add("gone", 3);
+  tl.to(".shapes", { opacity: 0, duration: 2 }, "gone");
 }
 
 function scaler(el, x, y) {
