@@ -40,7 +40,7 @@ function init(_ref) {
       }
     } });
   tl.set(".frame1", { opacity: 1 });
-  TweenLite.set("#shapes", { x: posX, y: posY });
+  TweenLite.set("#shapes", { x: posX, y: posY + 90 });
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
 
   tl.add("bars");
@@ -131,16 +131,16 @@ function copyShape(posX, posY) {
   var y = Math.random() * h_ - posY;
 
   var p2 = { x: x * .6, y: minMax(-200, -100) };
-  var p3 = { x: minMax(x, x - 50), y: h - posY + 12 };
+  var p3 = { x: minMax(x, x - 50), y: h - posY + 8 };
 
   TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: 1 });
-  var MAGIC_NUMBER = 150; // higher = faster
+  var MAGIC_NUMBER = 130; // higher = faster
   var duration = Math.min(h / MAGIC_NUMBER, 2);
-  console.log(h / MAGIC_NUMBER);
+
   var obj = {
-    duration: minMax(.1, duration),
-    scale: minMax(.2, .7),
-    ease: "power2.in",
+    duration: minMax(duration * .7, duration),
+    scale: minMax(.2, .9),
+    ease: "power3.in",
     rotation: minMax(90, 300),
     motionPath: {
       path: [p2, p3],

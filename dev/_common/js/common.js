@@ -28,7 +28,7 @@ function init( {pos, device, total} ){
 		}
 	}})
 	tl.set(".frame1", {opacity:1})	 
-	TweenLite.set("#shapes", {x:posX, y:posY})
+	TweenLite.set("#shapes", {x:posX, y:posY+90})
   TweenLite.set(["#circle", "#tri"], {scale:0})
 	
 	
@@ -132,16 +132,16 @@ function copyShape(posX, posY){
   
   
   const p2 = {x:x*.6, y:minMax(-200, -100)}
-  const p3 = {x:minMax(x, x-50), y:h-posY+12}
+  const p3 = {x:minMax(x, x-50), y:h-posY+8}
   
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
-  const MAGIC_NUMBER = 150; // higher = faster
+  const MAGIC_NUMBER = 130; // higher = faster
   const duration = Math.min(h/MAGIC_NUMBER, 2)
-  console.log(h/MAGIC_NUMBER);
+  
   const obj = {  	
-  	duration:minMax(.1, duration),
-  	scale: minMax(.2, .7),
-  	ease:"power2.in",
+  	duration:minMax(duration*.7, duration),
+  	scale: minMax(.2, .9),
+  	ease:"power3.in",
   	rotation:minMax(90, 300),
   	motionPath: {
         path: [
