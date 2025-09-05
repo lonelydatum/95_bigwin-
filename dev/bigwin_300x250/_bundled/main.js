@@ -20,6 +20,8 @@ gsap.defaults({
   ease: "power3.out"
 });
 
+gsap.registerPlugin(MotionPathPlugin);
+
 var READ = { t0: 2, t1: 2 };
 
 var w = bannerSize.w;
@@ -30,7 +32,6 @@ function init(_ref) {
   var device = _ref.device;
   var total = _ref.total;
 
-  console.log(pos, device, total);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -38,11 +39,10 @@ function init(_ref) {
         TweenLite.set("#legalBtn", { display: "block" });
       }
     } });
-
+  tl.set(".frame1", { opacity: 1 });
   TweenLite.set("#shapes", { x: posX, y: posY });
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
 
-  tl.set(".frame1", { opacity: 1 });
   tl.add("bars");
   tl.from(".top", { y: "-=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
   tl.from(".bottom", { y: "+=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
@@ -58,15 +58,19 @@ function init(_ref) {
   tl.from(".t0", { opacity: 0, duration: .3 }, "screen_1");
 
   tl.add("screen_change", "+=" + READ.t0);
-  for (var i = 0; i < total; i++) {
-    tl.add(copyShape(posX, posY), "screen_change");
-  }
-  tl.to(".shapes", { opacity: 0, duration: 1 }, "screen_change+=.5");
+
+  tl.call(function () {
+    confetti({ total: total, posX: posX, posY: posY });
+  });
+  // return
+  // tl.to(".shapes", {opacity:0, duration:1}, "screen_change+=.5")
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
   tl.to(".screen_1", { duration: .3, scale: 0, ease: "back.out" }, "screen_change");
 
   tl.from(".t1", { opacity: 0, duration: .3 }, "screen_change");
+
+  tl.to(".shapes", { opacity: 0, duration: 2 }, "+=1");
 
   tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
 
@@ -82,6 +86,21 @@ function init(_ref) {
   tl.add(logoGO());
 
   return tl;
+}
+
+function confetti(_ref2) {
+  var total = _ref2.total;
+  var posX = _ref2.posX;
+  var posY = _ref2.posY;
+
+  var MAGIC_NUMBER = 750;
+  var area = w * h;
+  console.log(area / MAGIC_NUMBER);
+  var tl = new TimelineMax();
+  for (var i = 0; i < area / MAGIC_NUMBER; i++) {
+
+    tl.add(copyShape(posX, posY), 0);
+  }
 }
 
 function scaler(el, x, y) {
@@ -103,22 +122,37 @@ function copyShape(posX, posY) {
 
   var cloned = document.getElementById(options[numShape]).cloneNode(true);
   document.getElementById("shapes").appendChild(cloned);
-  var PADDING = 60;
+  var PADDING = 0;
   var w_ = w + PADDING;
   var h_ = h + PADDING;
 
-  var x = Math.random() * w_ - posX - PADDING;
-  var y = Math.random() * h_ - posY - PADDING;
+  var x = Math.random() * w_ - posX;
+
+  var y = Math.random() * h_ - posY;
+
+  var p2 = { x: x * .6, y: minMax(-posY, -posY - 10) };
+  var p3 = { x: minMax(x, x - 50), y: h - posY - 12 };
+
   TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: 1 });
+  var MAGIC_NUMBER = 100;
+  var duration = Math.min(h / MAGIC_NUMBER, 3.6);
+  console.log(duration);
   var obj = {
-    x: x,
-    y: y,
-    duration: minMax(.2, 1.3),
-    rotation: minMax(0, 300),
-    scale: minMax(.2, .7) };
+    duration: minMax(1, duration),
+    scale: minMax(.1, .7),
+    ease: "back.out",
+    rotation: minMax(90, 300),
+    motionPath: {
+      path: [p2, p3],
+      curviness: .5, // makes a nice smooth arc
+      autoRotate: false
+    }
+  };
+
+  // console.log({...obj});
+
   tl.to(cloned, obj);
   return tl;
-  // tl.to(cloned, {opacity:0, duration:1}, 2)
 }
 
 function logoGO() {
@@ -233,7 +267,7 @@ exports.ypyScroll = ypyScroll;
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-(0, _commonJsCommonJs.init)({ pos: [.4, .36], total: 40, device: { x: -90 } });
+(0, _commonJsCommonJs.init)({ pos: [.36, .30], total: 100, device: { x: -90 } });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 

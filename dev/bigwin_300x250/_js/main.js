@@ -2,4 +2,4 @@ import {init} from '../../_common/js/common.js'
 
 
 
-init({pos:[.4, .36],total:40, device:{x:-90}})
+init({pos:[.36, .30],total:100, device:{x:-90}})
