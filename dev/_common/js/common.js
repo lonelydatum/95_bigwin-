@@ -89,9 +89,10 @@ function init( {pos, device, total} ){
 function confetti({total, posX, posY}){
 	const MAGIC_NUMBER = 750
 	const area = w*h
-	
+	console.log(area/MAGIC_NUMBER);
+	// const max = Math
 	const tl = new TimelineMax()
-	for(let i=0;i<area/MAGIC_NUMBER;i++){
+	for(let i=0;i<Math.min(area/MAGIC_NUMBER, 180);i++){
   
   	tl.add(copyShape(posX, posY), 0)
   }
@@ -130,17 +131,17 @@ function copyShape(posX, posY){
   const y = Math.random()*h_ - posY
   
   
-  const p2 = {x:x*.6, y:minMax(-posY, -posY-10)}
-  const p3 = {x:minMax(x, x-50), y:h-posY-12}
+  const p2 = {x:x*.6, y:minMax(-200, -100)}
+  const p3 = {x:minMax(x, x-50), y:h-posY+12}
   
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
-  const MAGIC_NUMBER = 100
-  const duration = Math.min(h/MAGIC_NUMBER, 3.6)
-  
+  const MAGIC_NUMBER = 150; // higher = faster
+  const duration = Math.min(h/MAGIC_NUMBER, 2)
+  console.log(h/MAGIC_NUMBER);
   const obj = {  	
-  	duration:minMax(.5, duration),
-  	scale: minMax(.1, .7),
-  	ease:"back.out",
+  	duration:minMax(.1, duration),
+  	scale: minMax(.2, .7),
+  	ease:"power2.in",
   	rotation:minMax(90, 300),
   	motionPath: {
         path: [
@@ -150,9 +151,6 @@ function copyShape(posX, posY){
         autoRotate: false
   	},
 	}
-
-	// console.log({...obj});
-	
   tl.to(cloned, obj)
   return tl
   

@@ -92,9 +92,10 @@ function confetti(_ref2) {
 
   var MAGIC_NUMBER = 750;
   var area = w * h;
-
+  console.log(area / MAGIC_NUMBER);
+  // const max = Math
   var tl = new TimelineMax();
-  for (var i = 0; i < area / MAGIC_NUMBER; i++) {
+  for (var i = 0; i < Math.min(area / MAGIC_NUMBER, 180); i++) {
 
     tl.add(copyShape(posX, posY), 0);
   }
@@ -129,17 +130,17 @@ function copyShape(posX, posY) {
 
   var y = Math.random() * h_ - posY;
 
-  var p2 = { x: x * .6, y: minMax(-posY, -posY - 10) };
-  var p3 = { x: minMax(x, x - 50), y: h - posY - 12 };
+  var p2 = { x: x * .6, y: minMax(-200, -100) };
+  var p3 = { x: minMax(x, x - 50), y: h - posY + 12 };
 
   TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: 1 });
-  var MAGIC_NUMBER = 100;
-  var duration = Math.min(h / MAGIC_NUMBER, 3.6);
-
+  var MAGIC_NUMBER = 150; // higher = faster
+  var duration = Math.min(h / MAGIC_NUMBER, 2);
+  console.log(h / MAGIC_NUMBER);
   var obj = {
-    duration: minMax(.5, duration),
-    scale: minMax(.1, .7),
-    ease: "back.out",
+    duration: minMax(.1, duration),
+    scale: minMax(.2, .7),
+    ease: "power2.in",
     rotation: minMax(90, 300),
     motionPath: {
       path: [p2, p3],
@@ -147,9 +148,6 @@ function copyShape(posX, posY) {
       autoRotate: false
     }
   };
-
-  // console.log({...obj});
-
   tl.to(cloned, obj);
   return tl;
 }
