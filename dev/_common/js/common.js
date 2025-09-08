@@ -8,18 +8,11 @@ gsap.defaults({
   ease: "power3.out"
 });
 
-gsap.registerPlugin(MotionPathPlugin) 
-
-
 
 const READ = {t0:2.5, t1:2.8}
-
-
- 
 const {w, h} = bannerSize
  
-function init( {pos, device, total} ){	
-	
+function init( {pos, device, total} ){		
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -28,49 +21,33 @@ function init( {pos, device, total} ){
 		}
 	}})
 	tl.set(".frame1", {opacity:1})	 
-	TweenLite.set("#shapes", {x:posX, y:posY})
-  TweenLite.set(["#circle", "#tri"], {scale:0})
+	scaler(".screen_1_screen_only", pos[0], pos[1])
+  scaler(".screen_2", pos[0], pos[1])
 	
-	
-
 	tl.add("bars")
   tl.from(".top", {y:"-=100", opacity:0, duration:.5, stagger:.05}, "bars")
   tl.from(".bottom", {y:"+=100", opacity:0, duration:.5, stagger:.05}, "bars")
+  tl.from(".ypy", {y:"+=150", opacity:0, duration:.3, stagger:.1}, "bars+=.2")
 
-
-
-  tl.from(".ypy", {y:"+=150", opacity:0, duration:.4, stagger:.2}, "bars+=.2")
-// return
   
-  
-
-  scaler(".screen_1_screen_only", pos[0], pos[1])
-  scaler(".screen_2", pos[0], pos[1])
 
   tl.add("screen_1")
 	tl.from(".screen_1_screen_only", {duration:.4, scale:0, ease:"back.out"}, "screen_1")
   tl.from(".t0", {opacity:0, duration:.3}, "screen_1")
-  
-
-  
-
   tl.add("screen_change", `+=${READ.t0}`)
   
+
   tl.call(()=>{
   	confetti({total, posX, posY})
-  })
+  }, [], "screen_change")
+
+  
   
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
   tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
-
-	tl.from(".t1", {opacity:0, duration:.3}, "screen_change")
-  
-	
- 
-
+	tl.from(".t1", {opacity:0, duration:.3}, "+=.5")
   tl.to(".t1", {opacity:0, duration:.3}, `+=${READ.t1}`)
-
   tl.add("end")
   tl.to(".ypy", {opacity:0, duration:.3}, "end")
   if(device){
@@ -79,36 +56,26 @@ function init( {pos, device, total} ){
   
 
   tl.from(".end_text", {opacity:0, duration:.3})
-  tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})
-  
-  tl.add(logoGO())
-  
+  tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})  
+  tl.add(logoGO())  
 	return tl
 }
 
-function confetti({total, posX, posY}){
+function confetti({posX, posY}){
+
+	TweenLite.set("#shapes", {x:posX, y:posY})
+  TweenLite.set(["#circle", "#tri"], {scale:0})
 	const MAGIC_NUMBER = 750
 	const area = w*h
-	console.log(area/MAGIC_NUMBER);
-	// const max = Math
+	const total = area/MAGIC_NUMBER
+	
 	const tl = new TimelineMax()
-	for(let i=0;i<Math.min(area/MAGIC_NUMBER, 180);i++){
-  
+	for(let i=0;i<total;i++){
   	tl.add(copyShape(posX, posY), 0)
   }
-  tl.add("gone", 3)
-  tl.to(".shapes", {opacity:0, duration:2}, "gone")
+  
 }
 
-function scaler(el, x, y){
-	TweenLite.set(el, { transformOrigin:`${x*100}% ${y*100}%`, x:`-${x*w}`, y:`-${y*h}` })
-}
-
-function minMax(min, max){
-	const diff = max-min
-	const num =  Math.random()*diff + min	
-	return num
-}
 
 function copyShape(posX, posY){
 	const tl = new TimelineMax()
@@ -125,39 +92,34 @@ function copyShape(posX, posY){
   const h_ = h+PADDING
 
 
-  let x = (Math.random()*300) - 150
+  let x = (Math.random()*w)
+  const y = Math.random()*h
+  
+  const p2 = {x:x, y:minMax(-posX, 200)}  
   
   
-  const y = Math.random()*h_ - posY
-  
-  
-  const p2 = {x:x, y:minMax(-posX, 200)}
-  // const p3 = {x:x, y:minMax(-200, 200)}
-  const p3 = {x:x, y:h-posY+8}
-  
-  TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:1})
+  TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:minMax(.8, 1)})
   const MAGIC_NUMBER = 130; // higher = faster
   const duration = Math.min(h/MAGIC_NUMBER, 2)
   
   const obj = {  	
-  	duration:minMax(.5, .8),
-  	
-  	scale: minMax(.15, .7),
-  	x:p2.x,
-  	y:p2.y,
-  	ease:"power2.out",
+  	duration:minMax(.5, .8),  	
+  	scale: minMax(.15, .6),
+  	x:x-15-posX,
+  	y:y-15-posY,
+  	ease:"back.out",
   	rotation:minMax(90, 300),
-  	// motionPath: {
-    //     path: [
-    //        p2, p3
-    //     ],
-    //     curviness: .5, // makes a nice smooth arc
-    //     autoRotate: false
-  	// },
+  	 
 	}
 
   tl.to(cloned, obj)
-  tl.to(cloned, {duration:minMax(.3, 1), y:"+=100",rotation:minMax(90, 300), x:`${Math.random()>.5?"-":"+"}=40`, opacity:0}, "-=.2")
+  tl.to(cloned, {
+  	duration:minMax(.3, 1), 
+  	y:"+=100",
+  	rotation:minMax(90, 300), 
+  	x:`${Math.random()>.5?"-":"+"}=20`, 
+  	opacity:0
+  }, "+=.1")
   return tl
   
 
@@ -195,4 +157,17 @@ function logoGO(){
 	tl.to(`#zero`, {duration:.1, opacity:1}, "zero")
 	return tl
 }
+
+
+function scaler(el, x, y){
+	TweenLite.set(el, { transformOrigin:`${x*100}% ${y*100}%`, x:`-${x*w}`, y:`-${y*h}` })
+}
+
+function minMax(min, max){
+	const diff = max-min
+	const num =  Math.random()*diff + min	
+	return num
+}
+
+
 export { bannerSize, logoGO, copyShape, minMax, scaler, init }
