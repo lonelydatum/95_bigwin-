@@ -12,7 +12,7 @@ gsap.defaults({
 const READ = {t0:2.5, t1:2.8}
 const {w, h} = bannerSize
  
-function init( {pos, device, total} ){		
+function init( {pos, device} ){		
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -38,7 +38,7 @@ function init( {pos, device, total} ){
   
 
   tl.call(()=>{
-  	confetti({total, posX, posY})
+  	confetti({  posX, posY})
   }, [], "screen_change")
 
   
@@ -67,7 +67,8 @@ function confetti({posX, posY}){
   TweenLite.set(["#circle", "#tri"], {scale:0})
 	const MAGIC_NUMBER = 750
 	const area = w*h
-	const total = area/MAGIC_NUMBER
+	const total = Math.min(area/MAGIC_NUMBER, 150)
+	console.log(total);
 	
 	const tl = new TimelineMax()
 	for(let i=0;i<total;i++){
@@ -94,6 +95,12 @@ function copyShape(posX, posY){
 
   let x = (Math.random()*w)
   const y = Math.random()*h
+  x = x-15-posX
+  if(x<-400){
+  	x = x/2
+  }
+  
+  console.log(x);
   
   const p2 = {x:x, y:minMax(-posX, 200)}  
   
@@ -105,7 +112,7 @@ function copyShape(posX, posY){
   const obj = {  	
   	duration:minMax(.5, .8),  	
   	scale: minMax(.15, .6),
-  	x:x-15-posX,
+  	x:x,
   	y:y-15-posY,
   	ease:"back.out",
   	rotation:minMax(90, 300),
@@ -115,7 +122,7 @@ function copyShape(posX, posY){
   tl.to(cloned, obj)
   tl.to(cloned, {
   	duration:minMax(.3, 1), 
-  	y:"+=100",
+  	y:"+=150",
   	rotation:minMax(90, 300), 
   	x:`${Math.random()>.5?"-":"+"}=20`, 
   	opacity:0

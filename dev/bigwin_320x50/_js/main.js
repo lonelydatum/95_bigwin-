@@ -10,7 +10,7 @@ const READ = {t0:2, t1:2}
  
 const {w, h} = bannerSize
 
-function init( {pos, device, total} ){	
+function init( {pos} ){	
 	console.log(pos);
 	const posX = pos[0] * w
 	const posY = pos[1] * h
@@ -51,7 +51,7 @@ function init( {pos, device, total} ){
   
 
   tl.add("screen_change", `+=${READ.t0}`)
-  for(let i=0;i<total;i++){
+  for(let i=0;i<50;i++){
   	tl.add(copyShape(posX, posY), "screen_change")
   }
 
@@ -65,9 +65,9 @@ function init( {pos, device, total} ){
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
   tl.to(".screen_1", {duration:.3, scale:0, ease:"back.out"}, "screen_change")
 
-  tl.to(".screen", {duration:.3, opacity:0})
+  tl.to([".screen", ".t0_b"], {duration:.3, opacity:0})
 
-  tl.to(".t0_b", {opacity:0, duration:.3} )
+  
 	tl.from(".t1", {opacity:0, duration:.3})
   
 
@@ -76,10 +76,7 @@ function init( {pos, device, total} ){
   tl.to(".t1", {opacity:0, duration:.3}, `+=${READ.t1}`)
 
   tl.add("end")
-  
-  if(device){
-  	tl.to(".screen", {...device, duration:.3}, "end")	
-  }
+   
   
   tl.from(".end_text", {opacity:0, duration:.3})
   tl.from([".end_legal", ".end_cta"], {opacity:0, duration:.3})
@@ -89,4 +86,4 @@ function init( {pos, device, total} ){
 	return tl
 }
 
-init({pos:[.5, .75], total:50})
+init({pos:[.73, .5]})

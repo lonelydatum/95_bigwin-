@@ -27,7 +27,6 @@ var h = bannerSize.h;
 function init(_ref) {
   var pos = _ref.pos;
   var device = _ref.device;
-  var total = _ref.total;
 
   var posX = pos[0] * w;
   var posY = pos[1] * h;
@@ -51,7 +50,7 @@ function init(_ref) {
   tl.add("screen_change", "+=" + READ.t0);
 
   tl.call(function () {
-    confetti({ total: total, posX: posX, posY: posY });
+    confetti({ posX: posX, posY: posY });
   }, [], "screen_change");
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
@@ -79,7 +78,8 @@ function confetti(_ref2) {
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
   var MAGIC_NUMBER = 750;
   var area = w * h;
-  var total = area / MAGIC_NUMBER;
+  var total = Math.min(area / MAGIC_NUMBER, 150);
+  console.log(total);
 
   var tl = new TimelineMax();
   for (var i = 0; i < total; i++) {
@@ -102,6 +102,12 @@ function copyShape(posX, posY) {
 
   var x = Math.random() * w;
   var y = Math.random() * h;
+  x = x - 15 - posX;
+  if (x < -400) {
+    x = x / 2;
+  }
+
+  console.log(x);
 
   var p2 = { x: x, y: minMax(-posX, 200) };
 
@@ -112,7 +118,7 @@ function copyShape(posX, posY) {
   var obj = {
     duration: minMax(.5, .8),
     scale: minMax(.15, .6),
-    x: x - 15 - posX,
+    x: x,
     y: y - 15 - posY,
     ease: "back.out",
     rotation: minMax(90, 300)
@@ -122,7 +128,7 @@ function copyShape(posX, posY) {
   tl.to(cloned, obj);
   tl.to(cloned, {
     duration: minMax(.3, 1),
-    y: "+=100",
+    y: "+=150",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0
@@ -251,8 +257,6 @@ exports.ypyScroll = ypyScroll;
 },{}],5:[function(require,module,exports){
 "use strict";
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
 var READ = { t0: 2, t1: 2 };
@@ -262,8 +266,6 @@ var h = _commonJsCommonJs.bannerSize.h;
 
 function init(_ref) {
   var pos = _ref.pos;
-  var device = _ref.device;
-  var total = _ref.total;
 
   console.log(pos);
   var posX = pos[0] * w;
@@ -296,7 +298,7 @@ function init(_ref) {
   tl.from(".t0_a", { opacity: 0, duration: .3 }, "screen_1");
 
   tl.add("screen_change", "+=" + READ.t0);
-  for (var i = 0; i < total; i++) {
+  for (var i = 0; i < 50; i++) {
     tl.add((0, _commonJsCommonJs.copyShape)(posX, posY), "screen_change");
   }
 
@@ -308,18 +310,13 @@ function init(_ref) {
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
   tl.to(".screen_1", { duration: .3, scale: 0, ease: "back.out" }, "screen_change");
 
-  tl.to(".screen", { duration: .3, opacity: 0 });
+  tl.to([".screen", ".t0_b"], { duration: .3, opacity: 0 });
 
-  tl.to(".t0_b", { opacity: 0, duration: .3 });
   tl.from(".t1", { opacity: 0, duration: .3 });
 
   tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
 
   tl.add("end");
-
-  if (device) {
-    tl.to(".screen", _extends({}, device, { duration: .3 }), "end");
-  }
 
   tl.from(".end_text", { opacity: 0, duration: .3 });
   tl.from([".end_legal", ".end_cta"], { opacity: 0, duration: .3 });
@@ -329,7 +326,7 @@ function init(_ref) {
   return tl;
 }
 
-init({ pos: [.5, .75], total: 50 });
+init({ pos: [.73, .5] });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 

@@ -27,7 +27,6 @@ var h = bannerSize.h;
 function init(_ref) {
   var pos = _ref.pos;
   var device = _ref.device;
-  var total = _ref.total;
 
   var posX = pos[0] * w;
   var posY = pos[1] * h;
@@ -51,7 +50,7 @@ function init(_ref) {
   tl.add("screen_change", "+=" + READ.t0);
 
   tl.call(function () {
-    confetti({ total: total, posX: posX, posY: posY });
+    confetti({ posX: posX, posY: posY });
   }, [], "screen_change");
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
@@ -79,7 +78,8 @@ function confetti(_ref2) {
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
   var MAGIC_NUMBER = 750;
   var area = w * h;
-  var total = area / MAGIC_NUMBER;
+  var total = Math.min(area / MAGIC_NUMBER, 150);
+  console.log(total);
 
   var tl = new TimelineMax();
   for (var i = 0; i < total; i++) {
@@ -102,6 +102,12 @@ function copyShape(posX, posY) {
 
   var x = Math.random() * w;
   var y = Math.random() * h;
+  x = x - 15 - posX;
+  if (x < -400) {
+    x = x / 2;
+  }
+
+  console.log(x);
 
   var p2 = { x: x, y: minMax(-posX, 200) };
 
@@ -112,7 +118,7 @@ function copyShape(posX, posY) {
   var obj = {
     duration: minMax(.5, .8),
     scale: minMax(.15, .6),
-    x: x - 15 - posX,
+    x: x,
     y: y - 15 - posY,
     ease: "back.out",
     rotation: minMax(90, 300)
@@ -122,7 +128,7 @@ function copyShape(posX, posY) {
   tl.to(cloned, obj);
   tl.to(cloned, {
     duration: minMax(.3, 1),
-    y: "+=100",
+    y: "+=150",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0
@@ -253,7 +259,7 @@ exports.ypyScroll = ypyScroll;
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-(0, _commonJsCommonJs.init)({ pos: [.5, .36], total: 37 });
+(0, _commonJsCommonJs.init)({ pos: [.5, .36] });
 
 },{"../../_common/js/common.js":1}]},{},[5])
 
