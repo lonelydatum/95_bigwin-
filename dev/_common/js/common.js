@@ -177,4 +177,4 @@ function minMax(min, max){
 }
 
 
-export { bannerSize, logoGO, copyShape, minMax, scaler, init }
+export { bannerSize, logoGO, copyShape, minMax, scaler, init, confetti, READ }

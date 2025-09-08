@@ -1,10 +1,10 @@
-import {bannerSize, logoGO, copyShape, minMax, scaler} from '../../_common/js/common.js'
+import {READ, confetti, bannerSize, logoGO, copyShape, minMax, scaler} from '../../_common/js/common.js'
 
 
 
 
 
-const READ = {t0:2, t1:2}
+
 
 
  
@@ -31,9 +31,10 @@ function init( {pos} ){
 
 
 
-  tl.from(".ypy", {y:"+=150", opacity:0, duration:.25, stagger:.2}, "bars+=.2")
 
-  tl.to(".ypy", { opacity:0, duration:.4 }, "+=1")
+  tl.from(".ypy", {y:"+=50", opacity:0, duration:.2, stagger:.1}, "bars+=.2")
+
+  tl.to(".ypy", { opacity:0, duration:.4 }, "+=.5")
 
 
 // return
@@ -50,10 +51,17 @@ function init( {pos} ){
 
   
 
-  tl.add("screen_change", `+=${READ.t0}`)
-  for(let i=0;i<50;i++){
-  	tl.add(copyShape(posX, posY), "screen_change")
-  }
+  tl.add("screen_change", `+=1.5`)
+
+
+  tl.call(()=>{
+    confetti({  posX, posY})
+  }, [], "screen_change")
+
+
+  // for(let i=0;i<50;i++){
+  // 	tl.add(copyShape(posX, posY), "screen_change")
+  // }
 
   tl.to(".t0_a", {opacity:0, duration:.3}, "screen_change")
   tl.from(".t0_b", {opacity:0, duration:.3}, "screen_change")

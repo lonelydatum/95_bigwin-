@@ -182,6 +182,8 @@ exports.copyShape = copyShape;
 exports.minMax = minMax;
 exports.scaler = scaler;
 exports.init = init;
+exports.confetti = confetti;
+exports.READ = READ;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";
@@ -259,8 +261,6 @@ exports.ypyScroll = ypyScroll;
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
-var READ = { t0: 2, t1: 2 };
-
 var w = _commonJsCommonJs.bannerSize.w;
 var h = _commonJsCommonJs.bannerSize.h;
 
@@ -284,9 +284,9 @@ function init(_ref) {
   tl.from(".top", { y: "-=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
   tl.from(".bottom", { y: "+=100", opacity: 0, duration: .5, stagger: .05 }, "bars");
 
-  tl.from(".ypy", { y: "+=150", opacity: 0, duration: .25, stagger: .2 }, "bars+=.2");
+  tl.from(".ypy", { y: "+=50", opacity: 0, duration: .2, stagger: .1 }, "bars+=.2");
 
-  tl.to(".ypy", { opacity: 0, duration: .4 }, "+=1");
+  tl.to(".ypy", { opacity: 0, duration: .4 }, "+=.5");
 
   // return
 
@@ -297,10 +297,15 @@ function init(_ref) {
   tl.from(".screen_1_screen_only", { duration: .4, scale: 0, ease: "back.out" }, "screen_1");
   tl.from(".t0_a", { opacity: 0, duration: .3 }, "screen_1");
 
-  tl.add("screen_change", "+=" + READ.t0);
-  for (var i = 0; i < 50; i++) {
-    tl.add((0, _commonJsCommonJs.copyShape)(posX, posY), "screen_change");
-  }
+  tl.add("screen_change", "+=1.5");
+
+  tl.call(function () {
+    (0, _commonJsCommonJs.confetti)({ posX: posX, posY: posY });
+  }, [], "screen_change");
+
+  // for(let i=0;i<50;i++){
+  // 	tl.add(copyShape(posX, posY), "screen_change")
+  // }
 
   tl.to(".t0_a", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".t0_b", { opacity: 0, duration: .3 }, "screen_change");
@@ -314,7 +319,7 @@ function init(_ref) {
 
   tl.from(".t1", { opacity: 0, duration: .3 });
 
-  tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + READ.t1);
+  tl.to(".t1", { opacity: 0, duration: .3 }, "+=" + _commonJsCommonJs.READ.t1);
 
   tl.add("end");
 

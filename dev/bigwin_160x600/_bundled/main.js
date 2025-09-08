@@ -182,6 +182,8 @@ exports.copyShape = copyShape;
 exports.minMax = minMax;
 exports.scaler = scaler;
 exports.init = init;
+exports.confetti = confetti;
+exports.READ = READ;
 
 },{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
 "use strict";
