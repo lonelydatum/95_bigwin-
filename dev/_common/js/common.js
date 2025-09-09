@@ -40,7 +40,7 @@ function init( {pos, device} ){
 
   tl.call(()=>{
   	confetti({  posX, posY})
-  }, [], "screen_change-=.3")
+  }, [])
 
 
   
@@ -96,12 +96,16 @@ function copyShape(posX, posY){
   let x = (Math.random()*w)
   let y = Math.random()*h
   x = x-15-posX
-  y = y-15-posY
+  y = y-posY
   if(x<-400){
-  	x = x/2
+  	x = x/3
+  }
+
+  if(w===320){
+  	y = -50
   }
   
-  console.log(x);
+  console.log(y);
   
   const p2 = {x:x, y:minMax(-posX, 200)}  
   
@@ -112,7 +116,7 @@ function copyShape(posX, posY){
   
   const obj = {  	
   	duration:minMax(.5, .7),  	
-  	scale: minMax(.15, .6),
+  	scale: minMax(.15, .5),
   	x:x,
   	y:y,
   	ease:"power1.in",
@@ -128,6 +132,7 @@ function copyShape(posX, posY){
   	rotation:minMax(90, 300), 
   	x:`${Math.random()>.5?"-":"+"}=20`, 
   	opacity:0,
+  	scale:"+=.3"
 
   },"-=.01")
   return tl

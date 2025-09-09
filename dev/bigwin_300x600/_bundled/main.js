@@ -52,7 +52,7 @@ function init(_ref) {
 
   tl.call(function () {
     confetti({ posX: posX, posY: posY });
-  }, [], "screen_change-=.3");
+  }, []);
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
@@ -103,12 +103,16 @@ function copyShape(posX, posY) {
   var x = Math.random() * w;
   var y = Math.random() * h;
   x = x - 15 - posX;
-  y = y - 15 - posY;
+  y = y - posY;
   if (x < -400) {
-    x = x / 2;
+    x = x / 3;
   }
 
-  console.log(x);
+  if (w === 320) {
+    y = -50;
+  }
+
+  console.log(y);
 
   var p2 = { x: x, y: minMax(-posX, 200) };
 
@@ -118,7 +122,7 @@ function copyShape(posX, posY) {
 
   var obj = {
     duration: minMax(.5, .7),
-    scale: minMax(.15, .6),
+    scale: minMax(.15, .5),
     x: x,
     y: y,
     ease: "power1.in",
@@ -133,7 +137,8 @@ function copyShape(posX, posY) {
     y: "+=150",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
-    opacity: 0
+    opacity: 0,
+    scale: "+=.3"
 
   }, "-=.01");
   return tl;
