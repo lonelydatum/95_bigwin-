@@ -19,6 +19,7 @@ var bannerSize = { w: banner.offsetWidth, h: banner.offsetHeight };
 gsap.defaults({
   ease: "power3.out"
 });
+gsap.registerPlugin(MotionPathPlugin);
 
 var READ = { t0: 2.5, t1: 2.8 };
 var w = bannerSize.w;
@@ -51,7 +52,7 @@ function init(_ref) {
 
   tl.call(function () {
     confetti({ posX: posX, posY: posY });
-  }, [], "screen_change");
+  }, [], "screen_change-=.3");
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
@@ -79,7 +80,6 @@ function confetti(_ref2) {
   var MAGIC_NUMBER = 750;
   var area = w * h;
   var total = Math.min(area / MAGIC_NUMBER, 150);
-  console.log(total);
 
   var tl = new TimelineMax();
   for (var i = 0; i < total; i++) {
@@ -103,6 +103,7 @@ function copyShape(posX, posY) {
   var x = Math.random() * w;
   var y = Math.random() * h;
   x = x - 15 - posX;
+  y = y - 15 - posY;
   if (x < -400) {
     x = x / 2;
   }
@@ -116,11 +117,11 @@ function copyShape(posX, posY) {
   var duration = Math.min(h / MAGIC_NUMBER, 2);
 
   var obj = {
-    duration: minMax(.5, .8),
+    duration: minMax(.5, .7),
     scale: minMax(.15, .6),
     x: x,
-    y: y - 15 - posY,
-    ease: "back.out",
+    y: y,
+    ease: "power1.in",
     rotation: minMax(90, 300)
 
   };
@@ -128,13 +129,70 @@ function copyShape(posX, posY) {
   tl.to(cloned, obj);
   tl.to(cloned, {
     duration: minMax(.3, 1),
-    ease: "back.out",
+    ease: "pwer2.out",
     y: "+=150",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0
 
-  }, "-=.05");
+  }, "-=.01");
+  return tl;
+}
+
+function copyShape____(posX, posY) {
+  var tl = new TimelineMax();
+  var options = ["circle", "tri"];
+  var colors = ["66cef6", "fed925", "8dc63f", "003c71", "fed925", "fed925"];
+  var numShape = Math.floor(Math.random() * options.length);
+  var numColors = Math.floor(Math.random() * colors.length);
+
+  var cloned = document.getElementById(options[numShape]).cloneNode(true);
+  document.getElementById("shapes").appendChild(cloned);
+  var PADDING = 0;
+  var w_ = w + PADDING;
+  var h_ = h + PADDING;
+
+  var x = Math.random() * w;
+  var y = Math.random() * h;
+  x = x - 15 - posX;
+  y = y - 15 - posY;
+  if (x < -400) {
+    x = x / 2;
+  }
+
+  var p2 = { x: x, y: minMax(-100, -300) };
+  var p3 = { x: Math.random() > .5 ? x - 20 : x + 20, y: minMax(h - posY, h - posY + 50) };
+  // console.log([p2, p3]);
+
+  TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: minMax(.8, 1) });
+  var MAGIC_NUMBER = 130; // higher = faster
+  var duration = minMax(1, 1.2);
+
+  var obj = {
+    duration: 5,
+    scale: minMax(.3, .6),
+
+    ease: "power1.in",
+    rotation: minMax(90, 300),
+    motionPath: {
+      path: [p2, p3],
+      curviness: .05, // straight line
+      autoRotate: false
+    }
+
+  };
+
+  tl.to(cloned, obj);
+  tl.to(cloned, { opacity: 0, duration: .3 });
+  // tl.to(cloned, {
+  // 	duration:.5,
+  // 	ease:"power3.out",
+  // 	y:p3.y,
+  // 	rotation:minMax(90, 300),
+  // 	x:p3.x,
+  // 	opacity:0,
+
+  // },`-=${duration*0}`)
   return tl;
 }
 

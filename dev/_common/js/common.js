@@ -7,6 +7,7 @@ const bannerSize = {w:banner.offsetWidth, h:banner.offsetHeight}
 gsap.defaults({
   ease: "power3.out"
 });
+gsap.registerPlugin(MotionPathPlugin);
 
 
 const READ = {t0:2.5, t1:2.8}
@@ -39,9 +40,9 @@ function init( {pos, device} ){
 
   tl.call(()=>{
   	confetti({  posX, posY})
-  }, [], "screen_change")
+  }, [], "screen_change-=.3")
 
-  
+
   
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
@@ -68,7 +69,7 @@ function confetti({posX, posY}){
 	const MAGIC_NUMBER = 750
 	const area = w*h
 	const total = Math.min(area/MAGIC_NUMBER, 150)
-	console.log(total);
+	
 	
 	const tl = new TimelineMax()
 	for(let i=0;i<total;i++){
@@ -76,7 +77,6 @@ function confetti({posX, posY}){
   }
   
 }
-
 
 function copyShape(posX, posY){
 	const tl = new TimelineMax()
@@ -94,8 +94,9 @@ function copyShape(posX, posY){
 
 
   let x = (Math.random()*w)
-  const y = Math.random()*h
+  let y = Math.random()*h
   x = x-15-posX
+  y = y-15-posY
   if(x<-400){
   	x = x/2
   }
@@ -110,11 +111,11 @@ function copyShape(posX, posY){
   const duration = Math.min(h/MAGIC_NUMBER, 2)
   
   const obj = {  	
-  	duration:minMax(.5, .8),  	
+  	duration:minMax(.5, .7),  	
   	scale: minMax(.15, .6),
   	x:x,
-  	y:y-15-posY,
-  	ease:"back.out",
+  	y:y,
+  	ease:"power1.in",
   	rotation:minMax(90, 300),
   	 
 	}
@@ -122,13 +123,84 @@ function copyShape(posX, posY){
   tl.to(cloned, obj)
   tl.to(cloned, {
   	duration:minMax(.3, 1), 
-  	ease:"back.out",
+  	ease:"pwer2.out",
   	y:"+=150",
   	rotation:minMax(90, 300), 
   	x:`${Math.random()>.5?"-":"+"}=20`, 
   	opacity:0,
 
-  },"-=.05")
+  },"-=.01")
+  return tl
+  
+
+}
+
+
+
+function copyShape____(posX, posY){
+	const tl = new TimelineMax()
+	const options = ["circle", "tri"]
+	const colors = ["66cef6", "fed925", "8dc63f", "003c71", "fed925", "fed925"]
+	const numShape = Math.floor(Math.random()*options.length)
+	const numColors = Math.floor(Math.random()*colors.length)
+	
+	
+	const cloned = document.getElementById(options[numShape]).cloneNode(true)
+  document.getElementById("shapes").appendChild(cloned)
+  const PADDING = 0
+  const w_ = w+PADDING
+  const h_ = h+PADDING
+
+
+  let x = Math.random()*w
+  let y = Math.random()*h
+  x = x-15-posX
+  y = y-15-posY
+  if(x<-400){
+  	x = x/2
+  }
+ 
+  
+  
+  
+  const p2 = {x:x, y:minMax(-100, -300)}  
+  const p3 = {x:Math.random()>.5?x-20:x+20, y:minMax(h-posY, h-posY+50)}  
+  // console.log([p2, p3]);
+  
+  
+  TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:minMax(.8, 1)})
+  const MAGIC_NUMBER = 130; // higher = faster
+  const duration =minMax(1, 1.2)
+  
+  const obj = {  	
+  	duration: 5,  	
+  	scale: minMax(.3, .6),
+  	
+  	ease:"power1.in",
+  	rotation:minMax(90, 300),
+  	 motionPath: {
+      path: [
+        p2, p3
+      ],
+      curviness: .05, // straight line
+      autoRotate: false
+    },
+    
+
+
+	}
+
+  tl.to(cloned, obj)
+  tl.to(cloned, {opacity:0, duration:.3} )
+  // tl.to(cloned, {
+  // 	duration:.5, 
+  // 	ease:"power3.out",
+  // 	y:p3.y,
+  // 	rotation:minMax(90, 300), 
+  // 	x:p3.x, 
+  // 	opacity:0,
+
+  // },`-=${duration*0}`)
   return tl
   
 
