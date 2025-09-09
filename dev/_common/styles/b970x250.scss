@@ -17,14 +17,14 @@
 
 .logo{	
 	@include pos(0, 0);
-	width: 132px;	
+	width: 108px;	
 	bottom:-3px;
 	left:0;
 }
 
 svg#fire{
-	@include pos-scale(86, -22, 0);
-	width: 27px;	
+	@include pos-scale(72, -22, 0);
+	width: 21px;	
 	
 }
 

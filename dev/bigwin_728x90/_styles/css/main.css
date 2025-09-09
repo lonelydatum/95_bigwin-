@@ -278,19 +278,19 @@ svg {
 }
 
 .logo {
-  width: 104px;
+  width: 87px;
 }
 
 svg#fire {
-  -webkit-transform: translate(68px, -21px) scale(0, 0);
-  -ms-transform: translate(68px, -21px) scale(0, 0);
-  transform: translate(68px, -21px) scale(0, 0);
+  -webkit-transform: translate(57px, -20px) scale(0, 0);
+  -ms-transform: translate(57px, -20px) scale(0, 0);
+  transform: translate(57px, -20px) scale(0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000px;
   perspective: 1000px;
   position: absolute;
-  width: 19px;
+  width: 15px;
 }
 
 #banner {

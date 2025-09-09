@@ -128,11 +128,13 @@ function copyShape(posX, posY) {
   tl.to(cloned, obj);
   tl.to(cloned, {
     duration: minMax(.3, 1),
+    ease: "back.out",
     y: "+=150",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0
-  }, "+=.1");
+
+  }, "-=.05");
   return tl;
 }
 

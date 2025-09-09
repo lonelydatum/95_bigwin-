@@ -23,17 +23,15 @@
  
 
 
-.logo{	
-	
-	width: 104px;	
-	
+.logo{		
+	width: 87px;		
 }
 
 
 
 svg#fire{
-	@include pos-scale(68, -21, 0);
-	width: 19px;	
+	@include pos-scale(57, -20, 0);
+	width: 15px;	
 	
 }
 

@@ -305,7 +305,7 @@ svg {
   -webkit-perspective: 1000px;
   perspective: 1000px;
   position: absolute;
-  width: 82px;
+  width: 72px;
   bottom: -3px;
   left: 0;
 }
@@ -334,15 +334,15 @@ svg {
 }
 
 svg#fire {
-  -webkit-transform: translate(55px, -18px) scale(0, 0);
-  -ms-transform: translate(55px, -18px) scale(0, 0);
-  transform: translate(55px, -18px) scale(0, 0);
+  -webkit-transform: translate(47px, -17px) scale(0, 0);
+  -ms-transform: translate(47px, -17px) scale(0, 0);
+  transform: translate(47px, -17px) scale(0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000px;
   perspective: 1000px;
   position: absolute;
-  width: 14px;
+  width: 13px;
   bottom: -3px;
   left: 0;
 }

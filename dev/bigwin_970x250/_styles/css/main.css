@@ -282,21 +282,21 @@ svg {
   -webkit-perspective: 1000px;
   perspective: 1000px;
   position: absolute;
-  width: 132px;
+  width: 108px;
   bottom: -3px;
   left: 0;
 }
 
 svg#fire {
-  -webkit-transform: translate(86px, -22px) scale(0, 0);
-  -ms-transform: translate(86px, -22px) scale(0, 0);
-  transform: translate(86px, -22px) scale(0, 0);
+  -webkit-transform: translate(72px, -22px) scale(0, 0);
+  -ms-transform: translate(72px, -22px) scale(0, 0);
+  transform: translate(72px, -22px) scale(0, 0);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000px;
   perspective: 1000px;
   position: absolute;
-  width: 27px;
+  width: 21px;
 }
 
 #banner {
