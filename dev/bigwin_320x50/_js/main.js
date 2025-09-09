@@ -10,8 +10,8 @@ import {READ, confetti, bannerSize, logoGO, copyShape, minMax, scaler} from '../
  
 const {w, h} = bannerSize
 
-function init( {pos} ){	
-	console.log(pos);
+function init( {pos, wh} ){	
+	console.log(wh);
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -53,9 +53,9 @@ function init( {pos} ){
 
   tl.add("screen_change", `+=1.5`)
 
-
+  console.log(wh);
   tl.call(()=>{
-    confetti({  posX, posY})
+    confetti({  posX, posY, wh})
   }, [], "screen_change")
 
 
@@ -94,4 +94,4 @@ function init( {pos} ){
 	return tl
 }
 
-init({pos:[.73, .5]})
+init({pos:[.73, .5], wh:{w:70, h:50}})

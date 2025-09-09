@@ -26,6 +26,7 @@ var h = bannerSize.h;
 function init(_ref) {
   var pos = _ref.pos;
   var device = _ref.device;
+  var wh = _ref.wh;
 
   var posX = pos[0] * w;
   var posY = pos[1] * h;
@@ -49,7 +50,7 @@ function init(_ref) {
   tl.add("screen_change", "+=" + READ.t0);
 
   tl.call(function () {
-    confetti({ posX: posX, posY: posY }, "screen_change");
+    confetti({ posX: posX, posY: posY, wh: wh }, "screen_change");
   }, [], "screen_change-=.35");
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
@@ -72,6 +73,7 @@ function init(_ref) {
 function confetti(_ref2) {
   var posX = _ref2.posX;
   var posY = _ref2.posY;
+  var wh = _ref2.wh;
 
   TweenLite.set("#shapes", { x: posX, y: posY });
   TweenLite.set(["#circle", "#tri"], { scale: 0 });
@@ -81,11 +83,11 @@ function confetti(_ref2) {
 
   var tl = new TimelineMax();
   for (var i = 0; i < total; i++) {
-    tl.add(copyShape(posX, posY), 0);
+    tl.add(copyShape(posX, posY, wh), 0);
   }
 }
 
-function copyShape(posX, posY) {
+function copyShape(posX, posY, wh) {
   var tl = new TimelineMax();
   var options = ["circle", "tri"];
   var colors = ["66cef6", "fed925", "8dc63f", "003c71", "fed925", "fed925"];
@@ -119,18 +121,24 @@ function copyShape(posX, posY) {
     y = minMax(-180, -50);
   }
 
-  console.log(y);
+  var wh_w = wh.w * 1.3;
+  var wh_h = wh.h * 1.3;
+
+  x = Math.random() * wh_w - wh_w / 2;
+  y = Math.random() * wh_h - wh_h / 2;
+
+  console.log(wh);
 
   TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: minMax(.8, 1) });
   var MAGIC_NUMBER = 130; // higher = faster
   var duration = Math.min(h / MAGIC_NUMBER, 2);
 
   var obj = {
-    duration: minMax(.7, .9),
+    duration: minMax(.5, .6),
     scale: minMax(.15, .5),
     x: x,
     y: y,
-    ease: "power2.in",
+    ease: "power1.in",
     rotation: minMax(90, 300)
 
   };
@@ -139,13 +147,13 @@ function copyShape(posX, posY) {
   tl.to(cloned, {
     duration: minMax(.5, .7),
     ease: "pwer2.out",
-    y: w === 320 ? 20 : minMax(80, 180),
+    y: "+=100",
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0,
     scale: "+=.1"
 
-  }, "-=.01");
+  });
   return tl;
 }
 
@@ -303,8 +311,9 @@ var h = _commonJsCommonJs.bannerSize.h;
 
 function init(_ref) {
   var pos = _ref.pos;
+  var wh = _ref.wh;
 
-  console.log(pos);
+  console.log(wh);
   var posX = pos[0] * w;
   var posY = pos[1] * h;
   var tl = new TimelineMax({ onComplete: function onComplete() {
@@ -336,8 +345,9 @@ function init(_ref) {
 
   tl.add("screen_change", "+=1.5");
 
+  console.log(wh);
   tl.call(function () {
-    (0, _commonJsCommonJs.confetti)({ posX: posX, posY: posY });
+    (0, _commonJsCommonJs.confetti)({ posX: posX, posY: posY, wh: wh });
   }, [], "screen_change");
 
   // for(let i=0;i<50;i++){
@@ -368,7 +378,7 @@ function init(_ref) {
   return tl;
 }
 
-init({ pos: [.73, .5] });
+init({ pos: [.73, .5], wh: { w: 70, h: 50 } });
 
 },{"../../_common/js/common.js":1}]},{},[4])
 

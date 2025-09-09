@@ -13,7 +13,7 @@ gsap.registerPlugin(MotionPathPlugin);
 const READ = {t0:2.5, t1:2.8}
 const {w, h} = bannerSize
  
-function init( {pos, device} ){		
+function init( {pos, device, wh} ){		
 	const posX = pos[0] * w
 	const posY = pos[1] * h
 	const tl = new TimelineMax({onComplete:()=>{
@@ -39,10 +39,10 @@ function init( {pos, device} ){
   
 
   tl.call(()=>{
-  	confetti({  posX, posY}, "screen_change")
+  	confetti({  posX, posY, wh}, "screen_change")
   }, [], "screen_change-=.35")
 
-
+  
   
   tl.to(".t0", {opacity:0, duration:.3}, "screen_change")
   tl.from(".screen_2", {duration:.4, scale:0, ease:"back.out"}, "screen_change")
@@ -62,7 +62,7 @@ function init( {pos, device} ){
 	return tl
 }
 
-function confetti({posX, posY}){
+function confetti({posX, posY, wh}){
 
 	TweenLite.set("#shapes", {x:posX, y:posY})
   TweenLite.set(["#circle", "#tri"], {scale:0})
@@ -73,12 +73,12 @@ function confetti({posX, posY}){
 	
 	const tl = new TimelineMax()
 	for(let i=0;i<total;i++){
-  	tl.add(copyShape(posX, posY), 0)
+  	tl.add(copyShape(posX, posY, wh), 0)
   }
   
 }
 
-function copyShape(posX, posY){
+function copyShape(posX, posY, wh){
 	const tl = new TimelineMax()
 	const options = ["circle", "tri"]
 	const colors = ["66cef6", "fed925", "8dc63f", "003c71", "fed925", "fed925"]
@@ -114,21 +114,25 @@ function copyShape(posX, posY){
   	y = minMax(-180, -50)
   }
   
-  console.log(y);
+  const wh_w = wh.w * 1.3
+  const wh_h = wh.h * 1.3
+
+  x = (Math.random()*wh_w) - (wh_w/2)
+  y = (Math.random()*wh_h) - (wh_h/2)
   
   
-  
+  console.log(wh);
   
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:minMax(.8, 1)})
   const MAGIC_NUMBER = 130; // higher = faster
   const duration = Math.min(h/MAGIC_NUMBER, 2)
   
   const obj = {  	
-  	duration:minMax(.7, .9),  	
+  	duration:minMax(.5, .6),  	
   	scale: minMax(.15, .5),
   	x:x,
   	y:y,
-  	ease:"power2.in",
+  	ease:"power1.in",
   	rotation:minMax(90, 300),
   	 
 	}
@@ -137,13 +141,13 @@ function copyShape(posX, posY){
   tl.to(cloned, {
   	duration:minMax(.5, .7), 
   	ease:"pwer2.out",
-  	y:w===320?20:minMax(80, 180),
+  	y:"+=100",
   	rotation:minMax(90, 300), 
   	x:`${Math.random()>.5?"-":"+"}=20`, 
   	opacity:0,
   	scale:"+=.1"
 
-  },"-=.01")
+  })
   return tl
   
 
