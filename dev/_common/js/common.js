@@ -1,6 +1,6 @@
 import {olg} from "./proline"
 import {origin} from "./helpers/helpers.js"
-import {initYPY, ypyScroll} from './ypy_fx.js'
+
 const banner = document.getElementById('banner')
 const bannerSize = {w:banner.offsetWidth, h:banner.offsetHeight}
 
@@ -39,8 +39,8 @@ function init( {pos, device} ){
   
 
   tl.call(()=>{
-  	confetti({  posX, posY})
-  }, [])
+  	confetti({  posX, posY}, "screen_change")
+  }, [], "screen_change-=.35")
 
 
   
@@ -97,6 +97,7 @@ function copyShape(posX, posY){
   let y = Math.random()*h
   x = x-15-posX
   y = y-posY
+  y = minMax(-120, 80)
   if(x<-400){
   	x = x/3
   }
@@ -104,10 +105,18 @@ function copyShape(posX, posY){
   if(w===320){
   	y = -50
   }
+
+  if(w===728){
+  	y = -100
+  }
+
+  if(w===970){
+  	y = minMax(-180, -50)
+  }
   
   console.log(y);
   
-  const p2 = {x:x, y:minMax(-posX, 200)}  
+  
   
   
   TweenLite.set(cloned, {fill:`#${colors[numColors]}`, opacity:minMax(.8, 1)})
@@ -115,24 +124,24 @@ function copyShape(posX, posY){
   const duration = Math.min(h/MAGIC_NUMBER, 2)
   
   const obj = {  	
-  	duration:minMax(.5, .7),  	
+  	duration:minMax(.7, .9),  	
   	scale: minMax(.15, .5),
   	x:x,
   	y:y,
-  	ease:"power1.in",
+  	ease:"power2.in",
   	rotation:minMax(90, 300),
   	 
 	}
 
   tl.to(cloned, obj)
   tl.to(cloned, {
-  	duration:minMax(.3, 1), 
+  	duration:minMax(.5, .7), 
   	ease:"pwer2.out",
-  	y:"+=150",
+  	y:w===320?20:minMax(80, 180),
   	rotation:minMax(90, 300), 
   	x:`${Math.random()>.5?"-":"+"}=20`, 
   	opacity:0,
-  	scale:"+=.3"
+  	scale:"+=.1"
 
   },"-=.01")
   return tl

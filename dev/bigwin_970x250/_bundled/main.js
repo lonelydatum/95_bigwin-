@@ -11,8 +11,6 @@ var _proline = require("./proline");
 
 var _helpersHelpersJs = require("./helpers/helpers.js");
 
-var _ypy_fxJs = require('./ypy_fx.js');
-
 var banner = document.getElementById('banner');
 var bannerSize = { w: banner.offsetWidth, h: banner.offsetHeight };
 
@@ -51,8 +49,8 @@ function init(_ref) {
   tl.add("screen_change", "+=" + READ.t0);
 
   tl.call(function () {
-    confetti({ posX: posX, posY: posY });
-  }, []);
+    confetti({ posX: posX, posY: posY }, "screen_change");
+  }, [], "screen_change-=.35");
 
   tl.to(".t0", { opacity: 0, duration: .3 }, "screen_change");
   tl.from(".screen_2", { duration: .4, scale: 0, ease: "back.out" }, "screen_change");
@@ -104,6 +102,7 @@ function copyShape(posX, posY) {
   var y = Math.random() * h;
   x = x - 15 - posX;
   y = y - posY;
+  y = minMax(-120, 80);
   if (x < -400) {
     x = x / 3;
   }
@@ -112,33 +111,39 @@ function copyShape(posX, posY) {
     y = -50;
   }
 
-  console.log(y);
+  if (w === 728) {
+    y = -100;
+  }
 
-  var p2 = { x: x, y: minMax(-posX, 200) };
+  if (w === 970) {
+    y = minMax(-180, -50);
+  }
+
+  console.log(y);
 
   TweenLite.set(cloned, { fill: "#" + colors[numColors], opacity: minMax(.8, 1) });
   var MAGIC_NUMBER = 130; // higher = faster
   var duration = Math.min(h / MAGIC_NUMBER, 2);
 
   var obj = {
-    duration: minMax(.5, .7),
+    duration: minMax(.7, .9),
     scale: minMax(.15, .5),
     x: x,
     y: y,
-    ease: "power1.in",
+    ease: "power2.in",
     rotation: minMax(90, 300)
 
   };
 
   tl.to(cloned, obj);
   tl.to(cloned, {
-    duration: minMax(.3, 1),
+    duration: minMax(.5, .7),
     ease: "pwer2.out",
-    y: "+=150",
+    y: w === 320 ? 20 : minMax(80, 180),
     rotation: minMax(90, 300),
     x: (Math.random() > .5 ? "-" : "+") + "=20",
     opacity: 0,
-    scale: "+=.3"
+    scale: "+=.1"
 
   }, "-=.01");
   return tl;
@@ -250,7 +255,7 @@ exports.init = init;
 exports.confetti = confetti;
 exports.READ = READ;
 
-},{"./helpers/helpers.js":2,"./proline":3,"./ypy_fx.js":4}],2:[function(require,module,exports){
+},{"./helpers/helpers.js":2,"./proline":3}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -289,46 +294,13 @@ function olg() {
 exports.olg = olg;
 
 },{}],4:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-function initYPY() {
-	var tl = new TimelineMax();
-	// tl.set(".ypy-all", {opacity:0})
-	for (var i = 1; i < 11; i++) {
-		tl.set(".ypy-all .ypy_all_" + i + " img", { y: -220 });
-	}
-}
-function ypyScroll() {
-	var tl = new TimelineMax();
-
-	// tl.set(".ypy-all", {opacity:0})
-	tl.add("spin");
-	tl.set(".hide-until", { visibility: "visible" }, "spin");
-	for (var i = 1; i < 11; i++) {
-		var y = i * 20;
-		var duration = i / 11 * 1.6;
-
-		tl.to(".ypy-all .ypy_all_" + i + " img", { ease: "back.inOut", y: (i - 1) * -20 - 2, duration: duration }, "spin");
-	}
-	return tl;
-}
-
-initYPY();
-
-exports.initYPY = initYPY;
-exports.ypyScroll = ypyScroll;
-
-},{}],5:[function(require,module,exports){
 'use strict';
 
 var _commonJsCommonJs = require('../../_common/js/common.js');
 
 (0, _commonJsCommonJs.init)({ pos: [.78, .5], total: 150 });
 
-},{"../../_common/js/common.js":1}]},{},[5])
+},{"../../_common/js/common.js":1}]},{},[4])
 
 
 //# sourceMappingURL=main.js.map
